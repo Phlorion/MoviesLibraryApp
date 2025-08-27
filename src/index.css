@@ -1,13 +1,352 @@
+/* GLOBAL VARIABLES */
+:root {
+  --beachsunset1-blue: #bee9e8;
+  --beachsunset2-blue: #62b6cb;
+  --beachsunset3-blue: #cae9ff;
+  --beachsunset4-blue: #5fa8d3;
+  --beachsunset5-blue: #1b4965;
+  --black: #000000;
+  --grey: #393e46;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(45deg, var(--black), var(--grey));
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* Movies List */
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.pageable {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 24px 0px;
+}
+
+.pageable a {
+  width: 32px;
+  height: 32px;
+  border: 1px solid whitesmoke;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pageable a span {
+  height: min-content;
+  width: min-content;
+  color: whitesmoke;
+  font-size: 1em;
+  transform: translateY(-2px);
+}
+
+.aquo {
+  font-size: 1.5em;
+  transform: translateY(-4px);
+}
+
+.pageable a span::selection {
+  background: transparent;
+  color: inherit;
+}
+
+/* Movies Posters */
+.movies__container {
+  margin: 12px;
+}
+
+.movieslist__grid {
+  display: grid;
+  /*border: 2px solid red;*/ /*DEBUG*/
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  justify-items: center;
+}
+
+.movieposter__wrapper {
+  width: 100%;
+  height: 250px;
+  margin: 8px;
+  transition: transform 0.1s ease-in-out, outline 0.1s ease-in-out;
+}
+
+.movieposter__wrapper:hover {
+  transform: scale(1.04);
+  outline: 2px solid white;
+  cursor: pointer;
+}
+
+.movieposter__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Movie Descriptions */
+.description__container {
+  width: 100%;
+  height: 300px;
+  box-sizing: content-box;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-image: linear-gradient(
+    45deg,
+    var(--beachsunset4-blue),
+    var(--main-blue)
+  );
+  border-radius: 0px 0px 12px 12px;
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.description__left h2 {
+  color: whitesmoke;
+  font-size: 2em;
+  margin: 10px 12px;
+}
+
+.description__left p {
+  color: whitesmoke;
+  font-size: 1.2em;
+}
+
+.movie__year__runtime {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  width: fit-content;
+  height: min-content;
+  margin-bottom: 12px;
+  margin-left: 12px;
+}
+
+.movie__year__runtime p {
+  font-weight: 600;
+}
+
+.movie__plot {
+  height: 5em;
+  overflow: hidden;
+  margin: 0px 12px;
+  margin-bottom: 12px;
+}
+
+.movie__plot p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* how many lines are shown */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie__genres,
+.movie__cast {
+  margin-left: 12px;
+  margin-bottom: 8px;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.description__right {
+  display: inline-flex;
+  justify-content: flex-end;
+}
+
+.movie__imagewrapper {
+  height: 100%;
+}
+
+.movie__imagewrapper img {
+  height: 100%;
+  display: block;
+  border-radius: 0px 0px 12px 0px;
+}
+
+/* Movie Details */
+.moviedetails__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 48px;
+  color: whitesmoke;
+  margin-top: 24px;
+}
+
+.moviedetails__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-left: 24px;
+}
+
+.moviedetails__imagewrapper {
+  width: 375px;
+  height: 500px;
+  border: 3px solid whitesmoke;
+}
+
+.moviedetails__imagewrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moviedetails__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.moviedetails__right h1 {
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.moviedetails__year_runtime {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.moviedetails__year_runtime span {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.moviedetails__movieplot {
+  width: 80%;
+}
+
+.moviedetails__movieplot span {
+  font-size: 1.2em;
+  font-weight: 300;
+}
+
+.moviedetails__genres span {
+  font-size: 1.2em;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.moviedetails__directors,
+.moviedetails__cast {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.moviedetails__directors span,
+.moviedetails__cast span {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.moviedetails__ratings_container {
+  display: flex;
+  flex-direction: row;
+  gap: 48px;
+  margin-top: 32px;
+}
+
+.moviedetails__imdbrating {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.moviedetails__imdbrating_rating {
+  font-size: 1.4em;
+  font-weight: 500;
+}
+
+.moviedetails__tomatoes {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 32px;
+}
+
+.moviedetails__tomatoes_meter {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.moviedetails__tomatoes_meter_true {
+  font-size: 1.4em;
+  font-weight: 500;
+}
+
+.moviedetails__tomatoes_meter_false {
+  font-size: 1.4em;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+/* Comments */
+.moviedetails__commments_container {
+  margin: 24px 128px 0px 24px;
+  color: whitesmoke;
+}
+
+.moviedetails__commments_container h2 {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.moviedetails__commments_form {
+  margin-top: 12px;
+}
+
+.moviedetails__commments_comment {
+  width: 100%;
+  height: 80px;
+  padding: 8px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--black);
+  background-color: rgba(57, 62, 70, 0.25);
+  box-shadow: none;
+  color: whitesmoke;
+  resize: none;
+  margin-bottom: 8px;
+}
+
+.moviedetails__commments_comment:focus {
+  outline: 0;
 }
