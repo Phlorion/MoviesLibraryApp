@@ -5,7 +5,7 @@ const MoviePoster = ({ movie }) => {
   const navigate = useNavigate();
 
   const handleMovieClick = (movieId) => {
-    navigate(`/movies/${movieId}`, { state: { movie } }); // load state so we don't need to call the api to fetch the movie again
+    navigate(`/movies/${movieId}`);
   };
 
   return (

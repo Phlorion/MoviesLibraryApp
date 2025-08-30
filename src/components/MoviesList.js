@@ -44,7 +44,7 @@ const MoviesList = ({}) => {
             onClick={() => getAllMovies(currPage - 1)}
             className={currPage === 0 ? "disabled" : ""}
           >
-            <span className="aquo">&laquo;</span>
+            <span className="aquo prevent-select">&laquo;</span>
           </a>
           {[...Array(moviesData.totalPages).keys()]
             .slice(startIndex, startIndex + 5)
@@ -55,7 +55,7 @@ const MoviesList = ({}) => {
                   className={page === currPage ? "disabled" : ""}
                   key={page}
                 >
-                  <span>{page + 1}</span>
+                  <span className="prevent-select">{page + 1}</span>
                 </a>
               );
             })}
@@ -63,7 +63,7 @@ const MoviesList = ({}) => {
             onClick={() => getAllMovies(currPage + 1)}
             className={currPage + 1 === moviesData.totalPages ? "disabled" : ""}
           >
-            <span className="aquo">&raquo;</span>
+            <span className="aquo prevent-select">&raquo;</span>
           </a>
         </div>
       )}

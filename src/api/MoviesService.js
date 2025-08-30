@@ -9,3 +9,7 @@ export async function getMovies(page = 0, size = 25) {
 export async function getMovie(id) {
   return await axios.get(`${API_URL}/${id}`);
 }
+
+export async function postComment(comment) {
+  return await axios.post(`${API_URL}/postComment`, comment);
+}
