@@ -10,7 +10,7 @@ const NavBar = () => {
           <Link to={"/"}>Home</Link>
         </li>
         <li>
-          <Link to={"/"}>Library</Link>
+          <Link to={"/movies"}>Library</Link>
         </li>
         <li>
           <div className="nav__search_wrapper">

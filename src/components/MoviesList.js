@@ -18,6 +18,7 @@ const MoviesList = ({}) => {
       // call api and update user state
       const { data } = await getMovies(page, size);
       setMoviesData(data);
+      window.scrollTo(0, 0);
     } catch (error) {
       console.log(error);
     }
@@ -26,7 +27,7 @@ const MoviesList = ({}) => {
   // get movies of specified page when the page is rendered
   useEffect(() => {
     getAllMovies(currPage);
-  }, [currPage]);
+  }, []);
 
   return moviesData.length === 0 ? (
     <p>Loading movies</p>

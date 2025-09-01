@@ -33,6 +33,8 @@ const MovieDetails = () => {
     const formData = new FormData(e.currentTarget);
     const text = formData.get("leave-comment");
     try {
+      //TODO: Change name and email details to match the signed in user
+      // also add sign in request if user is signed out
       const response = await postComment({
         name: "phlorion",
         email: "phlorion@gmail.com",
