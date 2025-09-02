@@ -45,3 +45,11 @@ export async function getFilteredMovies(
 
   return await axios.get(`${API_URL}/search${parameterString}`);
 }
+
+export async function getMoviesByTitle(input, limit = null) {
+  var searchPrompt =
+    limit != null
+      ? `${API_URL}/search/searchPrompt?input=${input}&limit=${limit}`
+      : `${API_URL}/search/searchPrompt?input=${input}`;
+  return await axios.get(searchPrompt);
+}
