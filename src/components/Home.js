@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getFilteredMovies } from "../api/MoviesService";
+import { getMovies } from "../api/MoviesService";
 import MoviePoster from "./MoviePoster";
 
 const Home = () => {
@@ -30,65 +30,81 @@ const Home = () => {
 
   const getMoviesByFilters = async (
     field,
+    page = 0,
+    size = 25,
     genre = null,
     type = null,
     minRating = null,
     minYear = null,
     maxYear = null,
+    containsInTitle = null,
     sortRating = null,
     sortYear = null,
-    limit = null
+    sortPopularity = null
   ) => {
-    const { data } = await getFilteredMovies(
+    const { data } = await getMovies(
+      page,
+      size,
       genre,
       type,
       minRating,
       minYear,
       maxYear,
+      containsInTitle,
       sortRating,
       sortYear,
-      limit
+      sortPopularity
     );
 
     setFilteredMovies((prevFilteredMovies) => ({
       ...prevFilteredMovies,
-      [field]: data,
+      [field]: data.content,
     }));
   };
 
   useEffect(() => {
+    // AWFUL way to pass the arguements. TODO: Pass the arguements as an object and deconstruct in api service function
     getMoviesByFilters(
       "top_rated",
+      0,
+      15,
       null,
       "movie",
       7,
       null,
       null,
+      null,
       "desc",
       null,
-      15
+      null
     );
     getMoviesByFilters(
       "recent",
+      0,
+      15,
       null,
       null,
       null,
       2010,
       null,
       null,
+      null,
       "desc",
-      15
+      null
     );
     getMoviesByFilters(
       "series",
+      0,
+      15,
       null,
       "series",
       5,
       null,
       null,
+      null,
       "desc",
       null,
-      15
+      null
     );
   }, []);
 

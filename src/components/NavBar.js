@@ -1,16 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getMoviesByTitle } from "../api/MoviesService";
+import { getMovies } from "../api/MoviesService";
 
 const NavBar = () => {
   const [searchResults, setSearchResults] = useState([]);
-  const [dropDownActive, setDropDownActive] = useState(false);
+  const [dropDownReady, setDropDownReady] = useState(false);
   const navigate = useNavigate();
 
   const searchForMovies = async (input) => {
     try {
-      const { data } = await getMoviesByTitle(input, 5);
-      if (data.length > 0) setSearchResults(data);
+      // if input is nothing then return empty results
+      if (input.trim().length === 0) {
+        setSearchResults([]);
+        return;
+      }
+
+      const { data } = await getMovies(
+        0,
+        5,
+        null,
+        null,
+        null,
+        null,
+        null,
+        input,
+        null,
+        null,
+        "desc"
+      );
+      if (data.content.length > 0) setSearchResults(data.content);
       else setSearchResults([]);
     } catch (error) {
       console.log(error);
@@ -38,8 +56,8 @@ const NavBar = () => {
                 className="nav__search"
                 placeholder="Search..."
                 onChange={(e) => searchForMovies(e.target.value)}
-                onFocus={() => setDropDownActive(true)}
-                onBlur={() => setDropDownActive(false)}
+                onFocus={() => setDropDownReady(true)}
+                onBlur={() => setDropDownReady(false)}
               ></input>
               <button className="nav__search_btn">
                 <i className="bi bi-search"></i>
@@ -57,7 +75,7 @@ const NavBar = () => {
       </div>
       <div
         className={
-          dropDownActive
+          dropDownReady && searchResults && searchResults.length > 0
             ? "nav__search_dropdown"
             : "nav__search_dropdown hidden"
         }
@@ -77,6 +95,7 @@ const NavBar = () => {
                           ? movie.poster
                           : "/No-Image-Placeholder.png"
                       }
+                      alt="/No-Image-Placeholder.png"
                     ></img>
                   </div>
                   <span>{movie.title}</span>

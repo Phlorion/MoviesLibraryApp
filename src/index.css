@@ -91,7 +91,7 @@ nav {
 }
 
 .nav__search_dropdown {
-  width: 30%;
+  width: 400px;
   height: 300px;
   background-color: var(--black);
 
@@ -308,10 +308,11 @@ nav {
   margin: 24px 0px;
 }
 
-.pageable a {
+.pageable button {
   width: 32px;
   height: 32px;
   border: 1px solid whitesmoke;
+  background-color: transparent;
   border-radius: 4px;
   display: flex;
   justify-content: center;
@@ -319,11 +320,11 @@ nav {
   cursor: pointer;
 }
 
-.pageable a span {
+.pageable button span {
   height: min-content;
   width: min-content;
   color: whitesmoke;
-  font-size: 1em;
+  font-size: 1.1em;
   transform: translateY(-2px);
 }
 
