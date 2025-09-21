@@ -59,7 +59,7 @@ const MoviesList = () => {
   // get movies of specified page when the page is rendered
   useEffect(() => {
     getAllMovies(filters);
-  }, []);
+  }, [searchParams]);
 
   return moviesData.length === 0 ? (
     <p>Loading movies</p>

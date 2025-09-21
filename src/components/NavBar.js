@@ -7,6 +7,8 @@ const NavBar = () => {
   const [dropDownReady, setDropDownReady] = useState(false);
   const navigate = useNavigate();
 
+  const [searchInput, setSearchInput] = useState(null);
+
   const searchForMovies = async (input) => {
     try {
       // if input is nothing then return empty results
@@ -14,6 +16,8 @@ const NavBar = () => {
         setSearchResults([]);
         return;
       }
+
+      setSearchInput(input);
 
       const { data } = await getMovies(
         0,
@@ -39,6 +43,13 @@ const NavBar = () => {
     navigate(`/movies/${movieId}`);
   };
 
+  const handleMovieSearch = (input) => {
+    navigate({
+      pathname: '/movies',
+      search: `?containsInTitle=${input}`
+    })
+  }
+
   return (
     <>
       <div className="nav__container">
@@ -59,7 +70,7 @@ const NavBar = () => {
                 onFocus={() => setDropDownReady(true)}
                 onBlur={() => setDropDownReady(false)}
               ></input>
-              <button className="nav__search_btn">
+              <button className="nav__search_btn" onClick={() => handleMovieSearch(searchInput)}>
                 <i className="bi bi-search"></i>
               </button>
             </div>
