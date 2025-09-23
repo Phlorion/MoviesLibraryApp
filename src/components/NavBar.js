@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getMovies } from "../api/MoviesService";
+import Filter from "../utils/Filter";
 
 const NavBar = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -20,17 +21,7 @@ const NavBar = () => {
       setSearchInput(input);
 
       const { data } = await getMovies(
-        0,
-        5,
-        null,
-        null,
-        null,
-        null,
-        null,
-        input,
-        null,
-        null,
-        "desc"
+        new Filter(0, 5).setContainsInTitle(input).isSortPopularity("desc").build()
       );
       if (data.content.length > 0) setSearchResults(data.content);
       else setSearchResults([]);

@@ -2,53 +2,40 @@ import React, { useEffect, useState } from "react";
 import { getMovies } from "../api/MoviesService";
 import MoviePoster from "./MoviePoster";
 import { useSearchParams } from "react-router-dom";
+import Filter from "../utils/Filter";
 
 const MoviesList = () => {
   const [moviesData, setMoviesData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  let filters = {
-    page: parseInt(searchParams.get("page")) || 0,
-    size: parseInt(searchParams.get("size")) || 100,
-    genre: searchParams.get("genre") || null,
-    type: searchParams.get("type") || null,
-    minRating: parseInt(searchParams.get("minRating")) || null,
-    minYear: parseInt(searchParams.get("minYear")) || null,
-    maxYear: parseInt(searchParams.get("maxYear")) || null,
-    containsInTitle: searchParams.get("containsInTitle") || null,
-    sortRating: searchParams.get("sortRating") || null,
-    sortYear: searchParams.get("sortYear") || null,
-    sortPopularity: searchParams.get("sortPopularity") || null,
-  };
+  let filter = new Filter(parseInt(searchParams.get("page")) || 0, parseInt(searchParams.get("size")) || 100)
+  .setGenre(searchParams.get("genre") || null)
+  .setType(searchParams.get("type") || null)
+  .setMinRating(parseInt(searchParams.get("minRating")) || null)
+  .setMinYear(parseInt(searchParams.get("minYear")) || null)
+  .setMaxYear(parseInt(searchParams.get("maxYear")) || null)
+  .setContainsInTitle(searchParams.get("containsInTitle") || null)
+  .isSortRating(searchParams.get("sortRating") || null)
+  .isSortYear(searchParams.get("sortYear") || null)
+  .isSortPopularity(searchParams.get("sortPopularity") || null)
+  .build();
 
-  const currPage = filters.page;
+  const currPage = filter.page;
 
   // create a sliding window of size 5 for the pages
   const startIndex = Math.max(0, currPage - 4);
 
-  const getAllMovies = async (filters) => {
+  const getAllMovies = async (filter) => {
     try {
       // get no null entries of filters
-      const noNull = Object.entries(filters).filter(
+      const noNull = Object.entries(filter).filter(
         ([key, value]) => value !== null && key !== "size" // hide size from client
       );
       const filtersNoNull = Object.fromEntries(noNull);
       // set parameters for fields that are not null
       setSearchParams(filtersNoNull);
       // call api and update user state
-      const { data } = await getMovies(
-        filters.page,
-        filters.size,
-        filters.genre,
-        filters.type,
-        filters.minRating,
-        filters.minYear,
-        filters.maxYear,
-        filters.containsInTitle,
-        filters.sortRating,
-        filters.sortYear,
-        filters.sortPopularity
-      );
+      const { data } = await getMovies(filter);
       setMoviesData(data);
       window.scrollTo(0, 0);
     } catch (error) {
@@ -58,7 +45,7 @@ const MoviesList = () => {
 
   // get movies of specified page when the page is rendered
   useEffect(() => {
-    getAllMovies(filters);
+    getAllMovies(filter);
   }, [searchParams]);
 
   return moviesData.length === 0 ? (
@@ -75,8 +62,8 @@ const MoviesList = () => {
         <div className="pageable">
           <button
             onClick={() => {
-              filters.page = currPage - 1;
-              getAllMovies(filters);
+              filter.page = currPage - 1;
+              getAllMovies(filter);
             }}
             className={currPage === 0 ? "disabled" : ""}
           >
@@ -88,8 +75,8 @@ const MoviesList = () => {
               return (
                 <button
                   onClick={() => {
-                    filters.page = page;
-                    getAllMovies(filters);
+                    filter.page = page;
+                    getAllMovies(filter);
                   }}
                   className={page === currPage ? "disabled" : ""}
                   key={page}
@@ -100,8 +87,8 @@ const MoviesList = () => {
             })}
           <button
             onClick={() => {
-              filters.page = currPage + 1;
-              getAllMovies(filters);
+              filter.page = currPage + 1;
+              getAllMovies(filter);
             }}
             className={currPage + 1 === moviesData.totalPages ? "disabled" : ""}
           >
