@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { getMovie } from "../api/MoviesService";
+import { useNavigate, useParams } from "react-router-dom";
+import { getMovie, postComment } from "../api/MoviesService";
 
 const MovieDetails = () => {
   const { movieId } = useParams(); // get movieId from the url parameters
-  const location = useLocation(); // get the saved state
+  const navigate = useNavigate();
 
-  // if we clicked on a movie poster then the state has stored the movie data
-  // if we access this url directly then we need to fetch the specific movie from the API
-  const [movie, setMovie] = useState(location.state?.movie);
+  // need to fetch the specific movie from the API
+  const [movieData, setMovie] = useState();
 
   const arrayToString = (array) => {
     var result = "";
@@ -20,28 +19,53 @@ const MovieDetails = () => {
   };
 
   const getSingleMovie = async (movieId) => {
-    const { data } = await getMovie(movieId);
-    console.log(data);
-    setMovie(data);
+    try {
+      const { data } = await getMovie(movieId);
+      //console.log(data);
+      setMovie(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitComment = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const text = formData.get("leave-comment");
+    try {
+      //TODO: Change name and email details to match the signed in user
+      // also add sign in request if user is signed out
+      const response = await postComment({
+        name: "phlorion",
+        email: "phlorion@gmail.com",
+        movie_id: movieData.movie._id,
+        text: text,
+      });
+      window.location.reload(false);
+    } catch (error) {
+      console.log(`Error posting comment: ${error}.`);
+    }
   };
 
   useEffect(() => {
-    if (!movie) {
-      getSingleMovie(movieId);
-    }
-  }, [movie]);
+    getSingleMovie(movieId);
+  }, [movieId]);
 
-  return !movie ? (
+  return !movieData ? (
     <p>Loading...</p>
   ) : (
     <>
+      <button className="return-btn" onClick={() => navigate(-1)}>
+        <i className="bi bi-arrow-return-left"></i>
+        <p>Return</p>
+      </button>
       <div className="moviedetails__container">
         <div className="moviedetails__left">
           <div className="moviedetails__imagewrapper">
             <img
               src={
-                movie.poster != null
-                  ? movie.poster
+                movieData.movie.poster != null
+                  ? movieData.movie.poster
                   : "/No-Image-Placeholder.png"
               }
               alt="/No-Image-Placeholder.png"
@@ -52,33 +76,37 @@ const MovieDetails = () => {
           </div>
         </div>
         <div className="moviedetails__right">
-          <h1>{movie.title}</h1>
+          <h1>{movieData.movie.title}</h1>
           <div className="moviedetails__year_runtime">
-            {movie.year && <span>{movie.year}</span>}
-            {movie.runtime && <span>{movie.runtime} min</span>}
+            {movieData.movie.year && <span>{movieData.movie.year}</span>}
+            {movieData.movie.runtime && (
+              <span>{movieData.movie.runtime} min</span>
+            )}
           </div>
-          {movie.fullplot && (
+          {movieData.movie.fullplot && (
             <div className="moviedetails__movieplot">
-              <span>{movie.fullplot}</span>
+              <span>{movieData.movie.fullplot}</span>
             </div>
           )}
-          {movie.genres && movie.genres.length > 0 && (
+          {movieData.movie.genres && movieData.movie.genres.length > 0 && (
             <div className="moviedetails__genres">
-              <span>{arrayToString(movie.genres)}</span>
+              <span>{arrayToString(movieData.movie.genres)}</span>
             </div>
           )}
-          {movie.directors && movie.directors.length > 0 && (
-            <div className="moviedetails__directors">
-              Created By: <span>{arrayToString(movie.directors)}</span>
-            </div>
-          )}
-          {movie.cast && movie.cast.length > 0 && (
+          {movieData.movie.directors &&
+            movieData.movie.directors.length > 0 && (
+              <div className="moviedetails__directors">
+                Created By:{" "}
+                <span>{arrayToString(movieData.movie.directors)}</span>
+              </div>
+            )}
+          {movieData.movie.cast && movieData.movie.cast.length > 0 && (
             <div className="moviedetails__cast">
-              Cast: <span>{arrayToString(movie.cast)}</span>
+              Cast: <span>{arrayToString(movieData.movie.cast)}</span>
             </div>
           )}
           <div className="moviedetails__ratings_container">
-            {movie.imdb && movie.imdb.rating && (
+            {movieData.movie.imdb && movieData.movie.imdb.rating && (
               <div className="moviedetails__imdbrating">
                 <svg
                   id="home_img"
@@ -104,17 +132,20 @@ const MovieDetails = () => {
                 </svg>
                 <span>
                   <span className="moviedetails__imdbrating_rating">
-                    {movie.imdb.rating}
+                    {movieData.movie.imdb.rating}
                   </span>{" "}
                   / 10
                 </span>
-                {movie.imdb.votes && <span>{movie.imdb.votes} reviews</span>}
+                {movieData.movie.imdb.votes && (
+                  <span>{movieData.movie.imdb.votes} reviews</span>
+                )}
               </div>
             )}
-            {movie.tomatoes && (
+            {movieData.movie.tomatoes && (
               <div className="moviedetails__tomatoes">
                 <div className="moviedetails__tomatoes_meter">
-                  {movie.tomatoes.critic && movie.tomatoes.critic.meter ? (
+                  {movieData.movie.tomatoes.critic &&
+                  movieData.movie.tomatoes.critic.meter ? (
                     <>
                       <svg
                         type="positive"
@@ -143,7 +174,7 @@ const MovieDetails = () => {
                         </g>
                       </svg>
                       <span className="moviedetails__tomatoes_meter_true">
-                        {movie.tomatoes.critic.meter}%
+                        {movieData.movie.tomatoes.critic.meter}%
                       </span>
                     </>
                   ) : (
@@ -181,7 +212,8 @@ const MovieDetails = () => {
                   )}
                 </div>
                 <div className="moviedetails__tomatoes_meter">
-                  {movie.tomatoes.viewer && movie.tomatoes.viewer.meter ? (
+                  {movieData.movie.tomatoes.viewer &&
+                  movieData.movie.tomatoes.viewer.meter ? (
                     <>
                       <svg
                         viewBox="0 0 80 80"
@@ -226,7 +258,7 @@ const MovieDetails = () => {
                         </g>
                       </svg>
                       <span className="moviedetails__tomatoes_meter_true">
-                        {movie.tomatoes.viewer.meter}%
+                        {movieData.movie.tomatoes.viewer.meter}%
                       </span>
                     </>
                   ) : (
@@ -261,19 +293,45 @@ const MovieDetails = () => {
           </div>
         </div>
       </div>
-      <div className="moviedetails__commments_container">
+      <div className="moviedetails__commments_section">
         <h2>
-          Comments ({movie.num_mflix_comments ? movie.num_mflix_comments : 0})
+          Comments (
+          {movieData.movie.num_mflix_comments
+            ? movieData.movie.num_mflix_comments
+            : 0}
+          )
         </h2>
         <hr />
-        <form className="moviedetails__commments_form">
+        <form className="moviedetails__commments_form" onSubmit={submitComment}>
           <textarea
             className="moviedetails__commments_comment"
             name="leave-comment"
             placeholder="Type your comment..."
           ></textarea>
-          <button type="submit">Comment</button>
+          <div className="moviedetails__commments_commentbtn_container">
+            <button type="submit">Comment</button>
+          </div>
         </form>
+        <div className="moviedetails__commments_container">
+          {movieData.comments && movieData.comments.length > 0 && (
+            <ul>
+              {movieData.comments.map((comment) => (
+                <li
+                  className="moviedetails__commments_usercomment_container"
+                  key={comment._id}
+                >
+                  <div className="moviedetails__commments_user">
+                    <img src="/no-profile-picture-icon.png"></img>
+                    <span>{comment.name}</span>
+                  </div>
+                  <div className="moviedetails__commments_usercomment">
+                    <span>{comment.text}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </>
   );
