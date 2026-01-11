@@ -16,7 +16,7 @@ A React-based web application for browsing and exploring a collection of movies.
 
 - Node.js (version 14 or higher)
 - npm or yarn
-- A running backend API server on `http://localhost:8080` that provides movie data
+- A running backend API server on `http://localhost:8080` that provides movie data. The backend of this project can be found here: https://github.com/Phlorion/SpringBootMoviesLibrary
 
 ### Installation
 
