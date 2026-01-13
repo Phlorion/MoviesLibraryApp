@@ -8,17 +8,20 @@ const MoviesList = () => {
   const [moviesData, setMoviesData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  let filter = new Filter(parseInt(searchParams.get("page")) || 0, parseInt(searchParams.get("size")) || 100)
-  .setGenre(searchParams.get("genre") || null)
-  .setType(searchParams.get("type") || null)
-  .setMinRating(parseInt(searchParams.get("minRating")) || null)
-  .setMinYear(parseInt(searchParams.get("minYear")) || null)
-  .setMaxYear(parseInt(searchParams.get("maxYear")) || null)
-  .setContainsInTitle(searchParams.get("containsInTitle") || null)
-  .isSortRating(searchParams.get("sortRating") || null)
-  .isSortYear(searchParams.get("sortYear") || null)
-  .isSortPopularity(searchParams.get("sortPopularity") || null)
-  .build();
+  let filter = new Filter(
+    parseInt(searchParams.get("page")) || 0,
+    parseInt(searchParams.get("size")) || 100
+  )
+    .setGenre(searchParams.get("genre") || null)
+    .setType(searchParams.get("type") || null)
+    .setMinRating(parseInt(searchParams.get("minRating")) || null)
+    .setMinYear(parseInt(searchParams.get("minYear")) || null)
+    .setMaxYear(parseInt(searchParams.get("maxYear")) || null)
+    .setContainsInTitle(searchParams.get("containsInTitle") || null)
+    .isSortRating(searchParams.get("sortRating") || null)
+    .isSortYear(searchParams.get("sortYear") || null)
+    .isSortPopularity(searchParams.get("sortPopularity") || null)
+    .build();
 
   const currPage = filter.page;
 
@@ -54,7 +57,10 @@ const MoviesList = () => {
     <div className="movies__container">
       <ul className="movieslist__grid">
         {moviesData.content.map((movie) => (
-          <MoviePoster movie={movie} key={movie.imdb.id} />
+          <li>
+            <MoviePoster movie={movie} key={movie.imdb.id} />
+            <span>{movie.title}</span>
+          </li>
         ))}
       </ul>
 

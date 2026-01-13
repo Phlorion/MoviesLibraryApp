@@ -92,7 +92,8 @@ nav {
 
 .nav__search_dropdown {
   width: 400px;
-  height: 300px;
+  height: fit-content;
+  max-height: 300px;
   background-color: var(--black);
 
   overflow-y: auto;
@@ -344,6 +345,11 @@ nav {
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 8px;
   justify-items: center;
+  color: white;
+}
+
+.movieslist__grid li {
+  text-align: center;
 }
 
 .movieposter__wrapper {
@@ -685,4 +691,96 @@ nav {
   justify-content: flex-start;
   align-items: flex-start;
   background-color: rgba(68, 68, 78, 0.2);
+}
+
+/*----------- Footer -----------*/
+footer {
+  grid-row: -1/-2;
+  grid-column: 1/4;
+  background-color: black;
+  padding: 80px;
+  padding-left: 24px;
+  margin-top: 32px;
+  color: white;
+}
+
+.footer-contents {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.footer-left {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.footer-right {
+  max-width: 550px; /*Max width of footer base contents no more than 550 pixels*/
+}
+
+/*Footer contact us, privacy policy and terms of service links*/
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/*Contact us icons*/
+.footer-contact-us {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/*Invert the color of the icons*/
+.footer-contact-us a svg {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(162deg)
+    brightness(101%) contrast(104%);
+}
+
+.footer-contact-us a {
+  display: block;
+  width: 28px; /*Set width same as icon's*/
+  height: 28px; /*Set height same as icon's*/
+
+  transition: transform 0.2s ease 0s; /*Transition settings*/
+}
+
+/*Link hovered transition*/
+.footer-contact-us a:hover {
+  transform: translateY(-4px); /*When link hovered move it up 4 pixels*/
+}
+
+/*Privacy Policy and Terms of Service links*/
+.footer-privacy-terms a {
+  text-decoration: none;
+  margin: 0 8px;
+}
+.footer-privacy-terms a:visited {
+  color: white;
+}
+/*Underline on hover*/
+.footer-privacy-terms a:hover {
+  text-decoration: underline;
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer-text p {
+  font-size: small;
+}
+
+.footer-copyright {
+  margin-top: 24px;
+  font-size: small;
 }

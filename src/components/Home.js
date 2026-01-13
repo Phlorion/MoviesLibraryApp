@@ -29,10 +29,7 @@ const Home = () => {
     }
   };
 
-  const getMoviesByFilters = async (
-    field,
-    filter
-  ) => {
+  const getMoviesByFilters = async (field, filter) => {
     const { data } = await getMovies(filter);
 
     setFilteredMovies((prevFilteredMovies) => ({
@@ -44,7 +41,11 @@ const Home = () => {
   useEffect(() => {
     getMoviesByFilters(
       "top_rated",
-      new Filter(0, 15).setType("movie").setMinRating(7).isSortRating("desc").build()
+      new Filter(0, 15)
+        .setType("movie")
+        .setMinRating(7)
+        .isSortRating("desc")
+        .build()
     );
     getMoviesByFilters(
       "recent",
@@ -52,7 +53,11 @@ const Home = () => {
     );
     getMoviesByFilters(
       "series",
-      new Filter(0, 5).setType("series").setMinRating(5).isSortRating("desc").build()
+      new Filter(0, 15)
+        .setType("series")
+        .setMinRating(5)
+        .isSortRating("desc")
+        .build()
     );
   }, []);
 

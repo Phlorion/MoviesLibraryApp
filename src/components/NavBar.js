@@ -12,16 +12,19 @@ const NavBar = () => {
 
   const searchForMovies = async (input) => {
     try {
+      setSearchInput(input);
+
       // if input is nothing then return empty results
       if (input.trim().length === 0) {
         setSearchResults([]);
         return;
       }
 
-      setSearchInput(input);
-
       const { data } = await getMovies(
-        new Filter(0, 5).setContainsInTitle(input).isSortPopularity("desc").build()
+        new Filter(0, 5)
+          .setContainsInTitle(input)
+          .isSortPopularity("desc")
+          .build()
       );
       if (data.content.length > 0) setSearchResults(data.content);
       else setSearchResults([]);
@@ -35,11 +38,12 @@ const NavBar = () => {
   };
 
   const handleMovieSearch = (input) => {
+    if (input.trim().length === 0) return;
     navigate({
-      pathname: '/movies',
-      search: `?containsInTitle=${input}`
-    })
-  }
+      pathname: "/movies",
+      search: `?containsInTitle=${input}`,
+    });
+  };
 
   return (
     <>
@@ -61,16 +65,19 @@ const NavBar = () => {
                 onFocus={() => setDropDownReady(true)}
                 onBlur={() => setDropDownReady(false)}
               ></input>
-              <button className="nav__search_btn" onClick={() => handleMovieSearch(searchInput)}>
+              <button
+                className="nav__search_btn"
+                onClick={() => handleMovieSearch(searchInput)}
+              >
                 <i className="bi bi-search"></i>
               </button>
             </div>
           </li>
           <li>
-            <Link to={"/"}>About</Link>
+            <Link to={"/about"}>About</Link>
           </li>
           <li>
-            <Link to={"/"}>Help</Link>
+            <Link to={"/help"}>Help</Link>
           </li>
         </ul>
         <div className="nav__account_container"></div>
