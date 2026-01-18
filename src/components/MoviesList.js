@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getMovies } from "../api/MoviesService";
 import MoviePoster from "./MoviePoster";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import Filter from "../utils/Filter";
 
 const MoviesList = () => {
@@ -10,7 +10,7 @@ const MoviesList = () => {
 
   let filter = new Filter(
     parseInt(searchParams.get("page")) || 0,
-    parseInt(searchParams.get("size")) || 100
+    parseInt(searchParams.get("size")) || 100,
   )
     .setGenre(searchParams.get("genre") || null)
     .setType(searchParams.get("type") || null)
@@ -32,7 +32,7 @@ const MoviesList = () => {
     try {
       // get no null entries of filters
       const noNull = Object.entries(filter).filter(
-        ([key, value]) => value !== null && key !== "size" // hide size from client
+        ([key, value]) => value !== null && key !== "size", // hide size from client
       );
       const filtersNoNull = Object.fromEntries(noNull);
       // set parameters for fields that are not null

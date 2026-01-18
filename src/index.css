@@ -355,12 +355,20 @@ nav {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  color: var(--text-color);
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.pageable button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .pageable button span {
   height: min-content;
   width: min-content;
-  color: var(--text-color);
   font-size: 1.1em;
   transform: translateY(-2px);
 }
@@ -815,7 +823,7 @@ footer::before {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 
 .footer-left {

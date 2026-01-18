@@ -1,19 +1,53 @@
-import { useEffect, useRef, useState } from "react";
+import { React, useState, useRef, useEffect } from "react";
+import Filter from "../utils/Filter";
 import { getMovies } from "../api/MoviesService";
 import MoviePoster from "./MoviePoster";
-import Filter from "../utils/Filter";
+import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Library = () => {
+  const navigate = useNavigate();
   const [showcasedCollections, setShowcasedCollections] = useState({
-    "Top Rated": [],
-    Recent: [],
-    Series: [],
+    movies: [],
+    series: [],
+    drama: [],
+    comedy: [],
+    action: [],
   });
 
   const mediaScrollerRefs = {
-    "Top Rated": useRef(null),
-    Recent: useRef(null),
-    Series: useRef(null),
+    movies: useRef(null),
+    series: useRef(null),
+    drama: useRef(null),
+    comedy: useRef(null),
+    action: useRef(null),
+  };
+
+  const collectionFilters = {
+    movies: new Filter(0, 25)
+      .setType("movie")
+      .setMinRating(7)
+      .isSortRating("desc")
+      .build(),
+    series: new Filter(0, 25)
+      .setType("series")
+      .setMinRating(5)
+      .isSortRating("desc")
+      .build(),
+    drama: new Filter(0, 25)
+      .setGenre("Drama")
+      .setMinRating(5)
+      .isSortPopularity("desc")
+      .build(),
+    comedy: new Filter(0, 25)
+      .setGenre("Comedy")
+      .setMinRating(5)
+      .isSortPopularity("desc")
+      .build(),
+    action: new Filter(0, 25)
+      .setGenre("Action")
+      .setMinRating(5)
+      .isSortPopularity("desc")
+      .build(),
   };
 
   const scroll = (scroller, dir) => {
@@ -32,7 +66,7 @@ const Home = () => {
     }
   };
 
-  const getCollectionByFilter = async (field, filter) => {
+  const getCollectionsByFilter = async (field, filter) => {
     const { data } = await getMovies(filter);
 
     setShowcasedCollections((prevShocasedCollections) => ({
@@ -42,31 +76,30 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getCollectionByFilter(
-      "Top Rated",
-      new Filter(0, 15)
-        .setType("movie")
-        .setMinRating(7)
-        .isSortRating("desc")
-        .build(),
-    );
-    getCollectionByFilter(
-      "Recent",
-      new Filter(0, 15).setMinYear(2010).isSortYear("desc").build(),
-    );
-    getCollectionByFilter(
-      "Series",
-      new Filter(0, 15)
-        .setType("series")
-        .setMinRating(5)
-        .isSortRating("desc")
-        .build(),
-    );
+    Object.keys(collectionFilters).forEach((category) => {
+      getCollectionsByFilter(category, collectionFilters[category]);
+    });
   }, []);
 
   const isEmpty = Object.values(showcasedCollections).every(
     (collection) => collection.length === 0,
   );
+
+  const createSearchParamsFromFilter = (filter) => {
+    const params = new URLSearchParams();
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        params.append(key, value);
+      }
+    });
+    return params.toString();
+  };
+
+  const seeAllClick = (category) => {
+    navigate(
+      `/library/collections?${createSearchParamsFromFilter(collectionFilters[category])}`,
+    );
+  };
 
   return isEmpty ? (
     <p>Loading...</p>
@@ -95,6 +128,13 @@ const Home = () => {
                   <span>{media.title}</span>
                 </div>
               ))}
+              <div className="media">
+                <div
+                  className="movieposter__wrapper"
+                  onClick={() => seeAllClick(category)}
+                ></div>
+                <span>See All</span>
+              </div>
             </div>
             <button
               className="scroll-btn right-btn"
@@ -111,4 +151,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Library;

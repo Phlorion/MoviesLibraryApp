@@ -24,7 +24,7 @@ const NavBar = () => {
         new Filter(0, 5)
           .setContainsInTitle(input)
           .isSortPopularity("desc")
-          .build()
+          .build(),
       );
       if (data.content.length > 0) setSearchResults(data.content);
       else setSearchResults([]);
@@ -34,7 +34,7 @@ const NavBar = () => {
   };
 
   const handleMovieClick = (movieId) => {
-    navigate(`/movies/${movieId}`);
+    navigate(`/library/${movieId}`);
   };
 
   const handleMovieSearch = (input) => {
@@ -56,7 +56,7 @@ const NavBar = () => {
             <Link to={"/"}>Home</Link>
           </li>
           <li>
-            <Link to={"/movies"}>Library</Link>
+            <Link to={"/library"}>Library</Link>
           </li>
           <li>
             <div className="nav__search_wrapper">

@@ -7,6 +7,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Home from "./components/Home";
 import About from "./components/About";
 import Help from "./components/Help";
+import Library from "./components/Library";
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/movies" element={<MoviesList />} />
-          <Route path="/movies/:movieId" element={<MovieDetails />} />
+          <Route path="/library" element={<Library />} />
+          <Route path="/library/:movieId" element={<MovieDetails />} />
+          <Route path="library/collections" element={<MoviesList />}></Route>
           <Route path="/about" element={<About />}></Route>
           <Route path="/help" element={<Help />}></Route>
         </Routes>

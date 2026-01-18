@@ -5,7 +5,7 @@ const MoviePoster = ({ movie }) => {
   const navigate = useNavigate();
 
   const handleMovieClick = (movieId) => {
-    navigate(`/movies/${movieId}`);
+    navigate(`/library/${movieId}`);
   };
 
   return (
