@@ -48,7 +48,9 @@ const NavBar = () => {
   return (
     <>
       <div className="nav__container">
-        <p className="prevent-select">MoviesLib</p>
+        <Link to="/" className="prevent-select">
+          MoviesLib
+        </Link>
         <ul className="nav__navigation">
           <li>
             <Link to={"/"}>Home</Link>
